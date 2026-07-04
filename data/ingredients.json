@@ -88,6 +88,14 @@
     {"id": "ectoin", "ko": "엑토인", "en": "Ectoin", "alias": [], "cat": "SOOTHING", "flags": ["TREND"]},
     {"id": "snail_mucin", "ko": "달팽이점액여과물", "en": "Snail Secretion Filtrate", "alias": ["스네일뮤신", "달팽이분비물여과물"], "cat": "REGENERATIVE", "flags": ["TREND"]},
     {"id": "mugwort", "ko": "쑥추출물", "en": "Artemisia Vulgaris Extract", "alias": ["아르테미시아추출물"], "cat": "SOOTHING", "flags": ["TREND"]},
+    {"id": "cyclomethicone", "ko": "사이클로메티콘", "en": "Cyclomethicone", "alias": [], "cat": "EMOLLIENT", "flags": ["BASE"]},
+    {"id": "cyclohexasiloxane", "ko": "사이클로헥사실록세인", "en": "Cyclohexasiloxane", "alias": [], "cat": "EMOLLIENT", "flags": ["BASE"]},
+    {"id": "dimethiconol", "ko": "다이메티콘올", "en": "Dimethiconol", "alias": [], "cat": "EMOLLIENT", "flags": ["BASE"]},
+    {"id": "triethanolamine", "ko": "트라이에탄올아민", "en": "Triethanolamine", "alias": ["티이에이"], "cat": "PH_ADJUSTER", "flags": ["BASE"]},
+    {"id": "triethylhexanoin", "ko": "트라이에틸헥사노인", "en": "Triethylhexanoin", "alias": [], "cat": "EMOLLIENT", "flags": ["BASE"]},
+    {"id": "polyglyceryl10_stearate", "ko": "폴리글리세릴-10스테아레이트", "en": "Polyglyceryl-10 Stearate", "alias": [], "cat": "EMULSIFIER", "flags": ["BASE"]},
+    {"id": "sodium_dehydroacetate", "ko": "소듐디하이드로아세테이트", "en": "Sodium Dehydroacetate", "alias": [], "cat": "PRESERVATIVE", "flags": ["RESTRICTED"], "limit": "산으로서 사용한도 0.6% — 식약처 사용제한 원료 고시"},
+    {"id": "caprylhydroxamic_acid", "ko": "카프릴하이드록사믹애씨드", "en": "Caprylhydroxamic Acid", "alias": [], "cat": "PRESERVATIVE", "flags": []},
 
     {"id": "retinol", "ko": "레티놀", "en": "Retinol", "alias": [], "cat": "RETINOID", "flags": ["TREND", "HIGH_POTENCY"], "limit": "기능성(주름개선) 고시 함량 2,500IU/g — 식약처 기능성화장품 고시"},
     {"id": "retinal", "ko": "레티날", "en": "Retinal", "alias": ["레틴알데하이드", "retinaldehyde"], "cat": "RETINOID", "flags": ["TREND", "HIGH_POTENCY"]},
@@ -108,7 +116,7 @@
     {"id": "gluconolactone", "ko": "글루코노락톤", "en": "Gluconolactone", "alias": [], "cat": "PHA", "flags": []},
     {"id": "lactobionic_acid", "ko": "락토바이오닉애씨드", "en": "Lactobionic Acid", "alias": [], "cat": "PHA", "flags": []},
 
-    {"id": "niacinamide", "ko": "나이아신아마이드", "en": "Niacinamide", "alias": ["니아신아마이드", "비타민b3"], "cat": "NIACINAMIDE", "flags": ["TREND"], "limit": "기능성(미백) 고시 함량 2~5% — 식약처 기능성화장품 고시"},
+    {"id": "niacinamide", "ko": "나이아신아마이드", "en": "Niacinamide", "alias": ["니아신아마이드", "비타민b3", "니코틴산아마이드", "니코틴산아미드", "니코틴아마이드"], "cat": "NIACINAMIDE", "flags": ["TREND"], "limit": "기능성(미백) 고시 함량 2~5% — 식약처 기능성화장품 고시"},
     {"id": "arbutin", "ko": "알부틴", "en": "Arbutin", "alias": ["알파알부틴", "alpha-arbutin"], "cat": "BRIGHTENER", "flags": [], "limit": "기능성(미백) 고시 함량 2~5% — 식약처 기능성화장품 고시"},
     {"id": "tranexamic_acid", "ko": "트라넥사믹애씨드", "en": "Tranexamic Acid", "alias": ["트라넥삼산"], "cat": "BRIGHTENER", "flags": ["TREND"]},
     {"id": "adenosine", "ko": "아데노신", "en": "Adenosine", "alias": [], "cat": "ANTI_AGING", "flags": [], "limit": "기능성(주름개선) 고시 함량 0.04% — 식약처 기능성화장품 고시"},

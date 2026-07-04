@@ -199,6 +199,22 @@ for ing in norm.ingredients.values():
     if not m.matched or m.ingredient.id != ing.id:
         self_bad.append((ing.ko, ing.id, m.ingredient.id if m.matched else "MISS"))
 check(f"자기일관성 {len(norm.ingredients)}종 무손실", not self_bad, str(self_bad[:5]))
+# folding 충돌: 서로 다른 성분이 같은 folded 키로 병합되면 안 됨
+from core.normalizer import _fold, _norm_key
+collide = {}
+for ing in norm.ingredients.values():
+    fk = _fold(_norm_key(ing.ko))
+    collide.setdefault(fk, []).append(ing.id)
+merged = {k: v for k, v in collide.items() if len(set(v)) > 1}
+check("folding 성분간 충돌 없음", not merged, str(list(merged.items())[:3]))
+
+print("[11] 확장 표준화 규칙(웹 검색 근거) 회귀 테스트")
+for name, eid in [("사이클로펜타실록세인", "cyclopentasiloxane"), ("시클로펜타실록산", "cyclopentasiloxane"),
+                  ("디메치콘", "dimethicone"), ("디소듐이디티에이", "disodium_edta"),
+                  ("디프로필렌글리콜", "dipropylene_glycol"), ("트리에탄올아민", None)]:
+    m = norm.match_one(name)
+    if eid:
+        check(f"확장규칙({name})", m.matched and m.ingredient.id == eid, f"got {m.method}/{m.ingredient}")
 
 print(f"\n결과: {PASS} passed, {len(FAIL)} failed")
 if FAIL:

@@ -22,6 +22,7 @@ CAT_KO = {
     "AZELAIC": "아젤라익애씨드", "REGENERATIVE": "재생(PDRN 등)", "SOOTHING": "진정",
     "BARRIER": "장벽강화", "FRAGRANCE": "착향", "PRESERVATIVE": "보존제", "UV_FILTER": "자외선차단",
     "HUMECTANT_ACTIVE": "보습 액티브", "BRIGHTENER": "미백", "ANTI_AGING": "주름개선",
+    "PROTEIN": "단백질(보습·컨디셔닝)", "SURFACTANT": "계면활성(세정)", "SALT": "점도조절",
 }
 
 

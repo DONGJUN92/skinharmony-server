@@ -178,6 +178,28 @@ check("folded_lookup 무결성(엔트리 존재)", len(norm._folded_lookup) > 10
 mt, un = norm.match_list(["사이클로펜타실록산", "세테아릴올리베이트", "쉐어버터"])
 check("사용자 3종 전부 인식(미확인 0)", len(un) == 0, f"미확인: {[u.raw for u in un]}")
 
+print("[10] 구명칭→표준명 정규화 + 신규 3종")
+# 사용자 요청 3종
+for name, eid in [("소듐라우릴설포아세테이트", "slsa"), ("하이드롤라이즈드케라틴", "hydrolyzed_keratin"),
+                  ("베타-글루칸", "beta_glucan"), ("베타글루칸", "beta_glucan")]:
+    m = norm.match_one(name)
+    check(f"신규 3종({name})", m.matched and m.ingredient.id == eid, f"got {m.ingredient}")
+# 구명칭 → 표준명 folding (웹 검색 근거 규칙)
+for name, eid in [("가수분해케라틴", "hydrolyzed_keratin"), ("소듐하이알루로네이트", "hyaluronic_acid"),
+                  ("이산화티탄", "titanium_dioxide"), ("산화아연", "zinc_oxide"),
+                  ("염화나트륨", "sodium_chloride"), ("1,2-헥산디올", "hexanediol"),
+                  ("프로판디올", "propanediol"), ("디메치콘", "dimethicone"),
+                  ("부틸렌글리콜", "butylene_glycol"), ("이소프로필미리스테이트", "isopropyl_myristate")]:
+    m = norm.match_one(name)
+    check(f"구명칭 정규화({name})", m.matched and m.ingredient.id == eid, f"got {m.method}/{m.ingredient}")
+# 자기일관성: 전 성분이 자기 표준명으로 매칭 유지(folding 부작용 0)
+self_bad = []
+for ing in norm.ingredients.values():
+    m = norm.match_one(ing.ko)
+    if not m.matched or m.ingredient.id != ing.id:
+        self_bad.append((ing.ko, ing.id, m.ingredient.id if m.matched else "MISS"))
+check(f"자기일관성 {len(norm.ingredients)}종 무손실", not self_bad, str(self_bad[:5]))
+
 print(f"\n결과: {PASS} passed, {len(FAIL)} failed")
 if FAIL:
     print("실패 목록:", FAIL)

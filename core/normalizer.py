@@ -22,6 +22,23 @@ CONTAINMENT_CATS = {"RETINOID", "VITC", "AHA", "BHA", "PHA", "NIACINAMIDE", "COP
 
 _PUNCT_RE = re.compile(r"[\s\-·,./()\[\]{}'\"‘’“”]+")
 _PCT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%")
+_PAREN_RE = re.compile(r"\(([^)]*)\)")
+
+
+def _name_candidates(s: str) -> list[str]:
+    """'리모넨(Limonene)' → ['리모넨(Limonene)', '리모넨', 'Limonene'].
+    한/영 병기·부연 괄호를 각각 독립 후보로 분리해 매칭 성공률을 높인다."""
+    s = (s or "").strip()
+    cands = [s]
+    if "(" in s:
+        before = s.split("(", 1)[0].strip()
+        if before:
+            cands.append(before)
+        for inside in _PAREN_RE.findall(s):
+            inside = inside.strip()
+            if inside:
+                cands.append(inside)
+    return cands
 
 
 def _norm_key(s: str) -> str:
@@ -90,21 +107,33 @@ class Normalizer:
 
     def match_one(self, raw: str, index: int = 0) -> MatchResult:
         clean, pct = extract_pct(raw)  # '레티놀 0.1%' → 이름/농도 분리
-        key = _norm_key(clean)
-        if not key:
-            return MatchResult(raw=raw, index=index, ingredient=None, method="none", score=0.0)
-        # 1) 정확 매칭
-        if key in self._lookup:
-            return MatchResult(raw, index, self.ingredients[self._lookup[key]], "exact", 1.0, pct)
-        # 2) 퍼지 매칭
-        cands = difflib.get_close_matches(key, self._keys, n=1, cutoff=FUZZY_THRESHOLD)
-        if cands:
-            score = difflib.SequenceMatcher(None, key, cands[0]).ratio()
-            return MatchResult(raw, index, self.ingredients[self._lookup[cands[0]]], "fuzzy", score, pct)
+        # 한/영 병기 '리모넨(Limonene)' 대응: 전체·괄호앞·괄호안을 각각 후보로 시도
+        cand_keys = []
+        for c in _name_candidates(clean):
+            k = _norm_key(c)
+            if k and k not in cand_keys:
+                cand_keys.append(k)
+        if not cand_keys:
+            return MatchResult(raw=raw, index=index, ingredient=None, method="none", score=0.0, pct=pct)
+        # 1) 정확 매칭(어느 후보든 성공하면 채택)
+        for k in cand_keys:
+            if k in self._lookup:
+                return MatchResult(raw, index, self.ingredients[self._lookup[k]], "exact", 1.0, pct)
+        # 2) 퍼지 매칭(후보 중 최고 점수)
+        best = None
+        for k in cand_keys:
+            cands = difflib.get_close_matches(k, self._keys, n=1, cutoff=FUZZY_THRESHOLD)
+            if cands:
+                score = difflib.SequenceMatcher(None, k, cands[0]).ratio()
+                if best is None or score > best[1]:
+                    best = (cands[0], score)
+        if best:
+            return MatchResult(raw, index, self.ingredients[self._lookup[best[0]]], "fuzzy", best[1], pct)
         # 3) 부분 매칭(액티브 한정)
-        for ck, ing_id in self._contain_keys:
-            if ck in key:
-                return MatchResult(raw, index, self.ingredients[ing_id], "contains", 0.8, pct)
+        for k in cand_keys:
+            for ck, ing_id in self._contain_keys:
+                if ck in k:
+                    return MatchResult(raw, index, self.ingredients[ing_id], "contains", 0.8, pct)
         # 4) 미확인 — 추정 금지
         return MatchResult(raw, index, None, "none", 0.0, pct)
 

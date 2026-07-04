@@ -137,6 +137,29 @@ out = compat.check([
 ])
 check("다른 구성엔 미출력", "스키니멀리즘" not in out)
 
+print("[8] 실전 버그 회귀 테스트 (한/영 병기 + 클렌저 커버리지)")
+# 8-1. '리모넨(Limonene)' 한/영 병기 매칭
+m = norm.match_one("리모넨(Limonene)")
+check("한/영 병기(리모넨(Limonene))", m.matched and m.ingredient.id == "limonene", f"got {m.method}/{m.ingredient}")
+m = norm.match_one("리날룰(Linalool)")
+check("한/영 병기(리날룰(Linalool))", m.matched and m.ingredient.id == "linalool")
+m = norm.match_one("나이아신아마이드 (Niacinamide) 5%")  # 병기+농도 동시
+check("병기+농도 동시", m.matched and m.ingredient.id == "niacinamide" and m.pct == 5.0, f"{m.method}/{m.pct}")
+m = norm.match_one("Retinol(레티놀)")  # 영문(한글) 역순
+check("영/한 역순 병기", m.matched and m.ingredient.id == "retinol")
+# 8-2. 클렌저/계면활성제 커버리지
+for name, eid in [("소듐라우레스설페이트", "sles"), ("코카미도프로필베타인", "cocamidopropyl_betaine"),
+                  ("코카미도엠이에이", "cocamide_mea"), ("소듐클로라이드", "sodium_chloride")]:
+    m = norm.match_one(name)
+    check(f"클렌저 사전({name})", m.matched and m.ingredient.id == eid, f"got {m.ingredient}")
+# 8-3. 실제 클렌저 전성분 → 미확인 대폭 감소
+cleanser = ["정제수", "소듐라우레스설페이트", "코카미도프로필베타인", "글리세린", "소듐클로라이드",
+            "코카미도엠이에이", "향료", "시트랄", "벤질살리실레이트", "리모넨(Limonene)", "리날룰(Linalool)",
+            "페녹시에탄올"]
+mt, un = norm.match_list(cleanser)
+check("클렌저 미확인 ≤1건(향료혼합물 제외)", len(un) <= 1, f"미확인 {len(un)}건: {[u.raw for u in un]}")
+check("리모넨 착향 인식", any(x.ingredient.id == "limonene" for x in mt))
+
 print(f"\n결과: {PASS} passed, {len(FAIL)} failed")
 if FAIL:
     print("실패 목록:", FAIL)

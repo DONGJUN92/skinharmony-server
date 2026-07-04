@@ -160,6 +160,24 @@ mt, un = norm.match_list(cleanser)
 check("클렌저 미확인 ≤1건(향료혼합물 제외)", len(un) <= 1, f"미확인 {len(un)}건: {[u.raw for u in un]}")
 check("리모넨 착향 인식", any(x.ingredient.id == "limonene" for x in mt))
 
+print("[9] 표기 변형 정규화(Variant Folding) 회귀 테스트")
+for name, eid in [("사이클로펜타실록산", "cyclopentasiloxane"), ("쉐어버터", "shea_butter"),
+                  ("부틸렌글리콜", "butylene_glycol"), ("디메티콘", "dimethicone"),
+                  ("메칠파라벤", "methylparaben")]:
+    m = norm.match_one(name)
+    check(f"변형 매칭({name})", m.matched and m.ingredient.id == eid, f"got {m.method}/{m.ingredient}")
+# 세테아릴올리베이트 신규 커버
+m = norm.match_one("세테아릴올리베이트")
+check("신규 커버(세테아릴올리베이트)", m.matched and m.ingredient.id == "cetearyl_olivate")
+# folding이 서로 다른 성분을 잘못 합치지 않는지(충돌 방지)
+ids = set()
+for k, i in norm._folded_lookup.items():
+    ids.add(i)
+check("folded_lookup 무결성(엔트리 존재)", len(norm._folded_lookup) > 100)
+# 사용자 3종 통합: 미확인 0건이어야
+mt, un = norm.match_list(["사이클로펜타실록산", "세테아릴올리베이트", "쉐어버터"])
+check("사용자 3종 전부 인식(미확인 0)", len(un) == 0, f"미확인: {[u.raw for u in un]}")
+
 print(f"\n결과: {PASS} passed, {len(FAIL)} failed")
 if FAIL:
     print("실패 목록:", FAIL)

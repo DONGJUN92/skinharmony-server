@@ -81,7 +81,7 @@ def _line(m: MatchResult, grade: str, reason: str, prefs: dict[str, str]) -> str
         tags.append(TREND_LABEL)
     cat = CAT_KO.get(ing.cat)
     label = f"**{ing.ko}({ing.en})**" + (f" · {cat}" if cat else "")
-    note = f" _{m.raw} → 표준명 매칭_" if m.method in ("fuzzy", "contains") else ""
+    note = f" _{m.raw} → 표준명 매칭_" if m.method in ("fuzzy", "contains", "variant") else ""
     return f"- {icon} {label} {' '.join(tags)} — {reason}{note}"
 
 

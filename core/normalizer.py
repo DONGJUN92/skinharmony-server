@@ -25,6 +25,28 @@ _PCT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%")
 _PAREN_RE = re.compile(r"\(([^)]*)\)")
 
 
+# 한글 INCI 표기 변형 정규화 규칙(협회 표준명 ↔ 통용 표기).
+# 규칙 하나가 성분 클래스 전체를 커버 → 개별 별칭 추가보다 확장성이 높다.
+_FOLD_RULES = [
+    ("실록세인", "실록산"),   # 사이클로펜타실록세인 ↔ 사이클로펜타실록산
+    ("쉐어", "시어"),         # 쉐어버터 ↔ 시어버터
+    ("글라이콜", "글리콜"),   # 부틸렌글라이콜 ↔ 부틸렌글리콜
+    ("다이", "디"),           # 다이메티콘 ↔ 디메티콘
+    ("에칠", "에틸"),         # 에칠헥실 ↔ 에틸헥실
+    ("메칠", "메틸"),         # 메칠파라벤 ↔ 메틸파라벤
+    ("옥칠", "옥틸"),
+    ("부칠", "부틸"),
+    ("세칠", "세틸"),
+]
+
+
+def _fold(key: str) -> str:
+    """정규화된 키를 표기 변형에 무관한 canonical 형태로 접는다."""
+    for a, b in _FOLD_RULES:
+        key = key.replace(a, b)
+    return key
+
+
 def _name_candidates(s: str) -> list[str]:
     """'리모넨(Limonene)' → ['리모넨(Limonene)', '리모넨', 'Limonene'].
     한/영 병기·부연 괄호를 각각 독립 후보로 분리해 매칭 성공률을 높인다."""
@@ -99,6 +121,10 @@ class Normalizer:
                 if key:
                     self._lookup.setdefault(key, ing.id)
         self._keys = list(self._lookup.keys())
+        # 표기 변형 대응: 접힌(folded) 키 → id. 실록세인/실록산, 시어/쉐어 등 클래스 단위 흡수
+        self._folded_lookup: dict[str, str] = {}
+        for key, ing_id in self._lookup.items():
+            self._folded_lookup.setdefault(_fold(key), ing_id)
         # 부분 매칭 후보: 액티브 카테고리의 한글 표준명(3글자 이상만 — 짧은 키 오탐 방지)
         self._contain_keys = [
             (_norm_key(ing.ko), ing.id) for ing in self.ingredients.values()
@@ -119,6 +145,11 @@ class Normalizer:
         for k in cand_keys:
             if k in self._lookup:
                 return MatchResult(raw, index, self.ingredients[self._lookup[k]], "exact", 1.0, pct)
+        # 1.5) 표기 변형 매칭(실록세인/실록산, 시어/쉐어 등) — 퍼지보다 정밀
+        for k in cand_keys:
+            fk = _fold(k)
+            if fk in self._folded_lookup:
+                return MatchResult(raw, index, self.ingredients[self._folded_lookup[fk]], "variant", 0.95, pct)
         # 2) 퍼지 매칭(후보 중 최고 점수)
         best = None
         for k in cand_keys:

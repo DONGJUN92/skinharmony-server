@@ -1,0 +1,26 @@
+{
+  "_comment": "카테고리 단위 충돌 룰. 성분쌍이 아닌 카테고리쌍이므로 신규 성분이 사전에 추가되면 자동으로 룰 커버리지가 확장됨.",
+  "rules": [
+    {"pair": ["RETINOID", "AHA"], "severity": "WARN", "reason": "레티노이드와 AHA(각질 산)를 함께 쓰면 각질 탈락이 중복되어 자극·붉어짐·건조 위험이 커집니다.", "routine": {"day": "AHA 제품 (자외선차단제 필수)", "night": "레티노이드 제품"}, "source": "식약처 기능성화장품 안전사용 안내 / 피부과 임상 가이드"},
+    {"pair": ["RETINOID", "BHA"], "severity": "WARN", "reason": "레티노이드와 BHA(살리실산 계열)를 함께 쓰면 자극과 건조가 심해질 수 있습니다.", "routine": {"day": "BHA 제품 (자외선차단제 필수)", "night": "레티노이드 제품"}, "source": "식약처 기능성화장품 안전사용 안내 / 피부과 임상 가이드"},
+    {"pair": ["RETINOID", "VITC"], "severity": "CAUTION", "reason": "순수 비타민C(저pH)와 레티노이드는 pH 작용 조건이 달라 동시 사용 시 자극 가능성이 있습니다. 아침/저녁 분리를 권장합니다.", "routine": {"day": "비타민C (항산화+자외선차단 시너지)", "night": "레티노이드 (야간 재생)"}, "source": "피부과 임상 가이드 / 성분 안정성 문헌"},
+    {"pair": ["RETINOID", "BPO"], "severity": "WARN", "reason": "벤조일퍼옥사이드는 레티노이드를 산화시켜 효과를 떨어뜨리고 자극을 높일 수 있습니다.", "routine": {"day": "벤조일퍼옥사이드(의약품, 전문가 상담)", "night": "레티노이드"}, "source": "피부과 임상 가이드"},
+    {"pair": ["AHA", "VITC"], "severity": "CAUTION", "reason": "산성 성분이 중복되어 민감성 피부는 자극·따가움이 나타날 수 있습니다.", "routine": {"day": "비타민C", "night": "AHA (격일 사용 권장)"}, "source": "피부과 임상 가이드"},
+    {"pair": ["BHA", "VITC"], "severity": "CAUTION", "reason": "산성 성분 중복으로 민감성 피부는 자극 가능성이 있습니다.", "routine": {"day": "비타민C", "night": "BHA (격일 사용 권장)"}, "source": "피부과 임상 가이드"},
+    {"pair": ["AHA", "BHA"], "severity": "CAUTION", "reason": "AHA와 BHA를 동시에 쓰면 각질 제거가 과도해져 장벽 손상 위험이 있습니다. 부위를 나누거나 격일 사용을 권장합니다.", "routine": {"day": "사용 안 함(자외선차단제)", "night": "AHA·BHA 중 하나만, 격일 교차"}, "source": "피부과 임상 가이드"},
+    {"pair": ["VITC", "NIACINAMIDE"], "severity": "INFO", "reason": "과거에는 상충 우려가 있었으나 현대 제형에서는 대체로 병용 가능합니다. 민감성 피부라면 따가움이 있는지만 확인하세요.", "routine": null, "source": "최신 성분 안정성 문헌(구형 우려 정정)"},
+    {"pair": ["VITC", "COPPER_PEPTIDE"], "severity": "WARN", "reason": "순수 비타민C와 카퍼(구리)펩타이드는 서로 산화/불활성화시켜 두 성분의 효과를 모두 떨어뜨릴 수 있습니다.", "routine": {"day": "비타민C", "night": "카퍼펩타이드"}, "source": "성분 안정성 문헌"},
+    {"pair": ["RETINOID", "COPPER_PEPTIDE"], "severity": "CAUTION", "reason": "같이 쓰면 안 되는 조합은 아니나, 흡수 경쟁·자극 가능성이 있어 시간대 분리가 무난합니다.", "routine": {"day": "카퍼펩타이드", "night": "레티노이드"}, "source": "성분 안정성 문헌"},
+    {"pair": ["AHA", "COPPER_PEPTIDE"], "severity": "WARN", "reason": "저pH 산 성분은 카퍼펩타이드 구조를 불안정하게 만들 수 있습니다.", "routine": {"day": "카퍼펩타이드", "night": "AHA"}, "source": "성분 안정성 문헌"},
+    {"pair": ["BPO", "VITC"], "severity": "WARN", "reason": "벤조일퍼옥사이드는 비타민C를 산화시켜 효과를 무력화할 수 있습니다.", "routine": {"day": "비타민C", "night": "벤조일퍼옥사이드(전문가 상담)"}, "source": "피부과 임상 가이드"},
+    {"pair": ["RETINOID", "PHA"], "severity": "INFO", "reason": "PHA는 AHA보다 순한 각질 산이라 병용 부담이 적지만, 민감성 피부는 격일 사용이 안전합니다.", "routine": null, "source": "피부과 임상 가이드"},
+    {"pair": ["AZELAIC", "AHA"], "severity": "CAUTION", "reason": "산 성분 중복으로 민감성 피부는 자극이 있을 수 있습니다. 저녁 격일 사용을 권장합니다.", "routine": {"day": "아젤라익애씨드", "night": "AHA (격일)"}, "source": "피부과 임상 가이드"},
+    {"pair": ["RETINOID", "IRRITANT_SENSITIVE"], "severity": "CAUTION", "reason": "레티노이드 사용 중에는 고농도 알코올·에센셜오일 등 자극 유발 성분이 자극을 증폭시킬 수 있습니다.", "routine": null, "source": "피부과 임상 가이드", "pair_is_flag": true}
+  ],
+  "synergies": [
+    {"pair": ["VITC", "ANTIOXIDANT"], "reason": "비타민C + 비타민E(토코페롤)는 항산화 시너지로 서로의 안정성과 효과를 높입니다.", "source": "항산화 병용 문헌"},
+    {"pair": ["RETINOID", "NIACINAMIDE"], "reason": "나이아신아마이드는 레티노이드의 자극을 완충해 주는 좋은 짝꿍입니다.", "source": "피부과 임상 가이드"},
+    {"pair": ["AHA", "SOOTHING"], "reason": "각질 산 사용 시 판테놀·병풀 등 진정 성분이 자극을 완화해 줍니다.", "source": "피부과 임상 가이드"},
+    {"pair": ["RETINOID", "BARRIER"], "reason": "세라마이드 등 장벽 성분은 레티노이드 사용기의 건조·자극을 줄여 줍니다.", "source": "피부과 임상 가이드"}
+  ]
+}

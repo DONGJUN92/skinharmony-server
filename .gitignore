@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Runtime data / test artifacts
+*.sqlite
+*.sqlite-*
+*.log
+sim*.sqlite*
+user_prefs.sqlite*
+
+# OS
+.DS_Store
+Thumbs.db

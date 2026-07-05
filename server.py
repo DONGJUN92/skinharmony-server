@@ -77,7 +77,7 @@ def analyze_ingredients(
     user_key: str | None = None,
     demo: bool = False,
 ) -> str:
-    """[스킨하모니 · 화장품 성분 신호등] Analyzes a pasted cosmetic full-ingredient list and returns an instant traffic-light(🟢🟡🔴) safety report in 스킨하모니 · 화장품 성분 신호등(SkinHarmony), based on Korean MFDS(식약처) public regulation data: restricted/limited ingredients, EU-26 fragrance allergens, and high-potency actives estimated by ingredient order. Trending ingredients (retinal, PDRN, niacinamide) are surfaced first. Pass user_key (user's nickname) to highlight personally remembered avoid/prefer ingredients. Set demo=true to show a sample report without any input — great for a first try ("예시로 보여줘"). Text input only.
+    """[스킨하모니 · 화장품 성분 신호등] SkinHarmony analyzes a pasted cosmetic full-ingredient list and returns an instant traffic-light(🟢🟡🔴) safety report, based on Korean MFDS(식약처) public regulation data: restricted/limited ingredients, EU-26 fragrance allergens, and high-potency actives estimated by ingredient order. Trending ingredients (retinal, PDRN, niacinamide) are surfaced first. Pass user_key (user's nickname) to highlight personally remembered avoid/prefer ingredients. Set demo=true to show a sample report without any input — great for a first try ("예시로 보여줘"). Text input only.
 
     Args:
         ingredients: 전성분 리스트(함량 내림차순). demo=true면 생략 가능
@@ -103,7 +103,7 @@ def analyze_ingredients(
     annotations=ToolAnnotations(title="성분 궁합 검사 (대표 기능)", **RO),
 )
 def check_compatibility(products: list[dict] | dict, user_key: str | None = None) -> str:
-    """[스킨하모니 · 화장품 성분 신호등] The signature feature of 스킨하모니 · 화장품 성분 신호등(SkinHarmony): cross-checks two or more products' ingredient lists for known layering conflicts — e.g., "레티놀 크림이랑 비타민C 세럼 같이 써도 돼?" — such as Retinoid×AHA/BHA, Vitamin C×Copper Peptide, and returns a Day/Night usage routine plus synergy pairs. Conflict rules are curated with cited sources (MFDS notices, dermatology guides); unknown combinations are reported honestly, never guessed. Text input only.
+    """[스킨하모니 · 화장품 성분 신호등] SkinHarmony's signature tool cross-checks two or more products' ingredient lists for known layering conflicts — e.g., "레티놀 크림이랑 비타민C 세럼 같이 써도 돼?" — such as Retinoid×AHA/BHA, Vitamin C×Copper Peptide, and returns a Day/Night usage routine plus synergy pairs. Conflict rules are curated with cited sources (MFDS notices, dermatology guides); unknown combinations are reported honestly, never guessed. Text input only.
 
     Args:
         products: 비교할 제품 목록. 각 항목은 {"name": 제품명(선택), "ingredients": [전성분]}
@@ -125,7 +125,7 @@ def remember_ingredient(
     user_key: str,
     reason: str | None = None,
 ) -> str:
-    """[스킨하모니 · 화장품 성분 신호등] Saves an ingredient to the user's personal AVOID(트러블) or PREFER(잘 맞음) list in 스킨하모니 · 화장품 성분 신호등(SkinHarmony), so every future report highlights it (★avoid / 👍prefer). Ask the user for a short nickname once and pass it as user_key. Idempotent: saving the same ingredient again just updates it.
+    """[스킨하모니 · 화장품 성분 신호등] SkinHarmony saves an ingredient to the user's personal AVOID(트러블) or PREFER(잘 맞음) list, so every future report highlights it (★avoid / 👍prefer). Ask the user for a short nickname once and pass it as user_key. Idempotent: saving the same ingredient again just updates it.
 
     Args:
         ingredient: 성분명(표준명/이명 허용, 예: 리모넨)
@@ -161,7 +161,7 @@ def remember_ingredient(
     annotations=ToolAnnotations(title="공식 성분 정보 조회", readOnlyHint=True, destructiveHint=False, openWorldHint=True, idempotentHint=True),
 )
 def search_cosmetic_info(query_name: str, user_key: str | None = None) -> str:
-    """[스킨하모니 · 화장품 성분 신호등] Looks up a single cosmetic ingredient in 스킨하모니 · 화장품 성분 신호등(SkinHarmony)'s standard dictionary built from Korean MFDS(식약처) public data: standard Korean/English name, category, usage limits, and regulation flags. Also shows the user's saved preference for it if user_key is given. Returns "not found" honestly when there is no match — never fabricates data.
+    """[스킨하모니 · 화장품 성분 신호등] SkinHarmony looks up a single cosmetic ingredient in its standard dictionary built from Korean MFDS(식약처) public data: standard Korean/English name, category, usage limits, and regulation flags. Also shows the user's saved preference for it if user_key is given. Returns "not found" honestly when there is no match — never fabricates data.
 
     Args:
         query_name: 조회할 성분명(예: 페녹시에탄올, retinol)
